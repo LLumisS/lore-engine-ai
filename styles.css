@@ -1,8 +1,65 @@
-/*
+/* LoreEngine AI base stylesheet (Obsidian theme-aware) */
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.lore-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+}
 
-If your plugin does not need CSS, delete this file.
+.lore-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3);
+	border-bottom: 1px solid var(--background-modifier-border);
+	background-color: var(--background-secondary);
+}
 
-*/
+.lore-muted {
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+}
+
+.lore-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-4-1);
+	padding: 2px var(--size-4-2);
+	border-radius: var(--radius-s);
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-secondary);
+	color: var(--text-normal);
+	font-size: var(--font-ui-smaller);
+}
+
+.lore-badge-accent {
+	border-color: var(--interactive-accent);
+	color: var(--interactive-accent);
+}
+
+.lore-badge-warning {
+	color: var(--text-warning);
+	border-color: var(--text-warning);
+}
+
+.lore-badge-error {
+	color: var(--text-error);
+	border-color: var(--text-error);
+}
+
+.lore-badge-success {
+	color: var(--text-success);
+	border-color: var(--text-success);
+}
+
+.lore-button-primary {
+	background-color: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.lore-button-primary:hover {
+	background-color: var(--interactive-accent-hover);
+}

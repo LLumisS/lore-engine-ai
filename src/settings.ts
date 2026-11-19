@@ -1,38 +1,100 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
-import MyPlugin from './main';
+import type {
+	ExperimentFlags,
+	PluginSettings,
+	ScoringWeights,
+	StatusMappings,
+	TypeMapping,
+} from './types';
 
-export interface MyPluginSettings {
-	mySetting: string;
-}
-
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default',
+export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
+	semantic: 0.35,
+	proximity: 0.25,
+	typeBoost: 0.2,
+	degree: 0.1,
+	recency: 0.1,
 };
 
-export class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+export const DEFAULT_STATUS_MAPPINGS: StatusMappings = {
+	terminatedTags: ['#статус/мертвий', '#status/dead'],
+	inactiveTags: ['#статус/зник', '#status/missing'],
+};
 
-	constructor(app: App, plugin: MyPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
+export const DEFAULT_EXPERIMENT_FLAGS: ExperimentFlags = {
+	disableGraphTraversal: false,
+	disableTemporalStratification: false,
+	disableTypePriority: false,
+	logRetrievalTraces: false,
+};
 
-	display(): void {
-		const { containerEl } = this;
+export const DEFAULT_SETTINGS: PluginSettings = {
+	uiLanguage: 'uk',
+	llmProvider: 'ollama',
+	cloudConsentGiven: false,
+	apiKeys: {},
+	modelName: 'llama3.1:8b',
+	embeddingProvider: 'ollama',
+	embeddingModel: 'nomic-embed-text',
+	ollamaUrl: 'http://localhost:11434',
+	sessionFolder: 'Sessions',
+	sessionNumberPattern: '(?:Сесія|Session|Сессия)\\s*#?(\\d+)',
+	typeMappings: [],
+	statusMappings: DEFAULT_STATUS_MAPPINGS,
+	tokenBudgetDeep: 10000,
+	tokenBudgetLight: 3500,
+	historyTurns: 5,
+	entityPoolSize: 3,
+	scoringWeights: DEFAULT_SCORING_WEIGHTS,
+	mechanicsPromptPath: '',
+	experiment: DEFAULT_EXPERIMENT_FLAGS,
+	onboardingDone: false,
+};
 
-		containerEl.empty();
+function cloneTypeMappings(mappings: TypeMapping[]): TypeMapping[] {
+	return mappings.map((mapping) => ({ ...mapping }));
+}
 
-		new Setting(containerEl)
-			.setName('Settings #1')
-			.setDesc("It's a secret")
-			.addText((text) =>
-				text
-					.setPlaceholder('Enter your secret')
-					.setValue(this.plugin.settings.mySetting)
-					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
-						await this.plugin.saveSettings();
-					}),
-			);
-	}
+/**
+ * Deeply merges saved settings with defaults so partial nested objects
+ * (scoringWeights, experiment, statusMappings, apiKeys) never lose default keys
+ * and DEFAULT_SETTINGS is never mutated.
+ */
+export function deepMergeSettings(
+	defaults: PluginSettings,
+	saved?: Partial<PluginSettings> | null,
+): PluginSettings {
+	const source = saved ?? {};
+
+	const typeMappings = Array.isArray(source.typeMappings)
+		? cloneTypeMappings(source.typeMappings)
+		: cloneTypeMappings(defaults.typeMappings);
+
+	const terminatedTags = Array.isArray(source.statusMappings?.terminatedTags)
+		? [...source.statusMappings.terminatedTags]
+		: [...defaults.statusMappings.terminatedTags];
+
+	const inactiveTags = Array.isArray(source.statusMappings?.inactiveTags)
+		? [...source.statusMappings.inactiveTags]
+		: [...defaults.statusMappings.inactiveTags];
+
+	return {
+		...defaults,
+		...source,
+		apiKeys: {
+			...defaults.apiKeys,
+			...(source.apiKeys ?? {}),
+		},
+		typeMappings,
+		statusMappings: {
+			terminatedTags,
+			inactiveTags,
+		},
+		scoringWeights: {
+			...defaults.scoringWeights,
+			...(source.scoringWeights ?? {}),
+		},
+		experiment: {
+			...defaults.experiment,
+			...(source.experiment ?? {}),
+		},
+	};
 }
