@@ -6,7 +6,7 @@ import {
 	getCalibrationRatio,
 	resetTokenizerCalibration,
 } from '../src/core/tokenizer';
-import { t } from '../src/i18n';
+import { formatMessage, getTranslations, t } from '../src/i18n';
 import { DEFAULT_SETTINGS, deepMergeSettings } from '../src/settings';
 import type { ScoringWeights } from '../src/types';
 
@@ -107,11 +107,24 @@ describe('deepMergeSettings', () => {
 });
 
 describe('i18n', () => {
-	it('returns localized strings for uk and en', () => {
+	it('returns localized strings for uk, ru, and en and formats placeholders', () => {
 		expect(t('uk', 'helloNotice')).toContain('LoreEngine AI');
+		expect(t('ru', 'helloNotice')).toContain('LoreEngine AI');
 		expect(t('en', 'helloNotice')).toContain('LoreEngine AI');
 		expect(t('uk', 'commandHelloName')).not.toBe(
 			t('en', 'commandHelloName'),
 		);
+		expect(t('ru', 'commandSyncGraphName')).toBe('Синхронизировать базу');
+
+		for (const lang of ['uk', 'ru', 'en'] as const) {
+			const dict = getTranslations(lang);
+			for (const value of Object.values(dict)) {
+				expect(value.length).toBeGreaterThan(0);
+			}
+		}
+
+		expect(
+			formatMessage(t('ru', 'statusBarDirty'), { count: 4 }),
+		).toContain('4');
 	});
 });
