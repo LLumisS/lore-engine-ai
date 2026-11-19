@@ -80,7 +80,7 @@ export type RetrievalMode =
 
 export type LlmProviderId = 'ollama' | 'openai' | 'anthropic' | 'gemini';
 
-export type UiLanguage = 'uk' | 'en';
+export type UiLanguage = 'uk' | 'ru' | 'en';
 
 export interface TypeMapping {
 	kind: 'folder' | 'tag';
@@ -193,4 +193,13 @@ export interface RetrievalTrace {
 export interface AssembledContext {
 	contextText: string;
 	trace: RetrievalTrace;
+}
+
+export interface GraphStats {
+	totalNodes: number;
+	totalEdges: number;
+	dirtyNodes: number;
+	byType: Record<EntityType, number>;
+	byStatus: Record<StatusType, number>;
+	edgesByKind: Record<GraphEdge['kind'], number>;
 }

@@ -15,9 +15,32 @@ export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
 };
 
 export const DEFAULT_STATUS_MAPPINGS: StatusMappings = {
-	terminatedTags: ['#статус/мертвий', '#status/dead'],
-	inactiveTags: ['#статус/зник', '#status/missing'],
+	terminatedTags: ['#статус/мертвий', '#статус/мертв', '#status/dead'],
+	inactiveTags: ['#статус/зник', '#статус/пропал', '#status/missing'],
 };
+
+export const DEFAULT_TYPE_MAPPINGS: TypeMapping[] = [
+	{ kind: 'folder', pattern: 'NPC/', type: 'NPC' },
+	{ kind: 'folder', pattern: 'Locations/', type: 'LOCATION' },
+	{ kind: 'folder', pattern: 'Quests/', type: 'QUEST' },
+	{ kind: 'folder', pattern: 'Factions/', type: 'FACTION' },
+	{ kind: 'folder', pattern: 'Items/', type: 'ITEM' },
+	{ kind: 'folder', pattern: 'Lore/', type: 'LORE' },
+	{ kind: 'tag', pattern: '#npc', type: 'NPC' },
+	{ kind: 'tag', pattern: '#location', type: 'LOCATION' },
+	{ kind: 'tag', pattern: '#локація', type: 'LOCATION' },
+	{ kind: 'tag', pattern: '#локация', type: 'LOCATION' },
+	{ kind: 'tag', pattern: '#quest', type: 'QUEST' },
+	{ kind: 'tag', pattern: '#квест', type: 'QUEST' },
+	{ kind: 'tag', pattern: '#faction', type: 'FACTION' },
+	{ kind: 'tag', pattern: '#фракція', type: 'FACTION' },
+	{ kind: 'tag', pattern: '#фракция', type: 'FACTION' },
+	{ kind: 'tag', pattern: '#item', type: 'ITEM' },
+	{ kind: 'tag', pattern: '#предмет', type: 'ITEM' },
+	{ kind: 'tag', pattern: '#lore', type: 'LORE' },
+	{ kind: 'tag', pattern: '#лор', type: 'LORE' },
+	{ kind: 'tag', pattern: '#meta', type: 'META' },
+];
 
 export const DEFAULT_EXPERIMENT_FLAGS: ExperimentFlags = {
 	disableGraphTraversal: false,
@@ -37,7 +60,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	ollamaUrl: 'http://localhost:11434',
 	sessionFolder: 'Sessions',
 	sessionNumberPattern: '(?:Сесія|Session|Сессия)\\s*#?(\\d+)',
-	typeMappings: [],
+	typeMappings: DEFAULT_TYPE_MAPPINGS,
 	statusMappings: DEFAULT_STATUS_MAPPINGS,
 	tokenBudgetDeep: 10000,
 	tokenBudgetLight: 3500,
