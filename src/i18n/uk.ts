@@ -6,7 +6,7 @@ export const uk = {
 	settingsHeadingGeneral: 'Загальні налаштування',
 	settingsLanguageName: 'Мова інтерфейсу',
 	settingsLanguageDesc:
-		'Оберіть мову інтерфейсу плагіна (українська за замовчуванням).',
+		'Оберіть мову інтерфейсу плагіна.',
 	settingsLanguageUk: 'Українська',
 	settingsLanguageRu: 'Русский',
 	settingsLanguageEn: 'English',
@@ -55,7 +55,7 @@ export const uk = {
 	pingPromptLabel: 'Тестовий запит',
 	pingDefaultPrompt:
 		'Привіт! Дай коротку відповідь одним реченням для перевірки зв’язку з LoreEngine AI.',
-	pingStartButton: 'Надіслати (стримінг)',
+	pingStartButton: 'Надіслати',
 	pingEmbeddingButton: 'Перевірити ембедінги',
 	pingAbortButton: 'Зупинити',
 	pingStatusIdle: 'Готово до перевірки.',

@@ -103,6 +103,12 @@ describe('deepMergeSettings', () => {
 			'#custom',
 		);
 		expect(DEFAULT_SETTINGS.scoringWeights.semantic).toBe(0.35);
+		expect(merged.chatModels.openai).toBe(
+			DEFAULT_SETTINGS.chatModels.openai,
+		);
+		expect(merged.embeddingModels.gemini).toBe(
+			DEFAULT_SETTINGS.embeddingModels.gemini,
+		);
 	});
 });
 

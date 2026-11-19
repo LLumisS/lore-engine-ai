@@ -11,7 +11,7 @@ export const en: TranslationDictionary = {
 	settingsHeadingGeneral: 'General settings',
 	settingsLanguageName: 'Interface language',
 	settingsLanguageDesc:
-		'Choose the plugin interface language (Ukrainian by default).',
+		'Choose the plugin interface language.',
 	settingsLanguageUk: 'Українська',
 	settingsLanguageRu: 'Русский',
 	settingsLanguageEn: 'English',
@@ -61,7 +61,7 @@ export const en: TranslationDictionary = {
 	pingPromptLabel: 'Test prompt',
 	pingDefaultPrompt:
 		'Hello! Reply with one short sentence to verify the LoreEngine AI connection.',
-	pingStartButton: 'Send (streaming)',
+	pingStartButton: 'Send',
 	pingEmbeddingButton: 'Test embeddings',
 	pingAbortButton: 'Stop',
 	pingStatusIdle: 'Ready to test.',

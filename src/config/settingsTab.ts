@@ -33,14 +33,14 @@ export interface LoreEnginePluginHost extends Plugin {
 }
 
 const PROVIDER_LABELS: Record<LlmProviderId, string> = {
-	ollama: 'Ollama (local)',
+	ollama: 'Ollama',
 	openai: 'OpenAI',
 	anthropic: 'Anthropic',
 	gemini: 'Google Gemini',
 };
 
 const EMBEDDING_PROVIDER_LABELS: Record<'ollama' | 'openai' | 'gemini', string> = {
-	ollama: 'Ollama (local)',
+	ollama: 'Ollama',
 	openai: 'OpenAI',
 	gemini: 'Google Gemini',
 };

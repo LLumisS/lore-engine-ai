@@ -8,7 +8,7 @@ export const ru: TranslationDictionary = {
 	settingsHeadingGeneral: 'Общие настройки',
 	settingsLanguageName: 'Язык интерфейса',
 	settingsLanguageDesc:
-		'Выберите язык интерфейса плагина (по умолчанию украинский).',
+		'Выберите язык интерфейса плагина.',
 	settingsLanguageUk: 'Українська',
 	settingsLanguageRu: 'Русский',
 	settingsLanguageEn: 'English',
@@ -58,7 +58,7 @@ export const ru: TranslationDictionary = {
 	pingPromptLabel: 'Тестовый запрос',
 	pingDefaultPrompt:
 		'Привет! Дай короткий ответ одним предложением для проверки связи с LoreEngine AI.',
-	pingStartButton: 'Отправить (стриминг)',
+	pingStartButton: 'Отправить',
 	pingEmbeddingButton: 'Проверить эмбеддинги',
 	pingAbortButton: 'Остановить',
 	pingStatusIdle: 'Готово к проверке.',
