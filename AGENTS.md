@@ -267,3 +267,14 @@ this.registerInterval(
 - Developer policies: https://docs.obsidian.md/Developer+policies
 - Plugin guidelines: https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines
 - Style guide: https://help.obsidian.md/style-guide
+
+## Project-specific rules (LoreEngine AI)
+
+- This project is LoreEngine AI. Read MASTER_PROMPT.md first and follow its
+  stage protocol: do not proceed to the next stage without my confirmation.
+- Before each stage, read the relevant skills in .agent/skills/.
+- MASTER_PROMPT.md overrides this file on architecture and folder structure.
+  This file remains the authority on build/lint commands, manifest and
+  release rules, and privacy policy.
+- Do not change manifest "id" or the plugin folder name.
+- src/core/ must never import from 'obsidian'.
