@@ -3,18 +3,27 @@ import {
 	GraphStatsModal,
 	OnboardingWizardModal,
 } from './config/onboardingWizard';
+import {
+	LoreEngineSettingTab,
+	PingLlmModal,
+	type LoreEnginePluginHost,
+} from './config/settingsTab';
 import { GraphIndex } from './engine/graphIndex';
 import { GraphStorage } from './engine/storage';
 import { formatMessage, t } from './i18n';
 import { DEFAULT_SETTINGS, deepMergeSettings } from './settings';
 import type { PluginSettings } from './types';
 
-export default class LoreEngineAIPlugin extends Plugin {
+export default class LoreEngineAIPlugin
+	extends Plugin
+	implements LoreEnginePluginHost
+{
 	settings: PluginSettings = deepMergeSettings(DEFAULT_SETTINGS);
 	private graphStorage: GraphStorage | null = null;
 	private graphIndex: GraphIndex | null = null;
 	private statusBarEl: HTMLElement | null = null;
 	private unsubscribeDirty: (() => void) | null = null;
+	private activeAbortControllers = new Set<AbortController>();
 
 	async onload(): Promise<void> {
 		await this.loadSettings();
@@ -90,6 +99,16 @@ export default class LoreEngineAIPlugin extends Plugin {
 			},
 		});
 
+		this.addCommand({
+			id: 'ping-llm',
+			name: t(this.settings.uiLanguage, 'commandPingLlmName'),
+			callback: () => {
+				this.openPingModal();
+			},
+		});
+
+		this.addSettingTab(new LoreEngineSettingTab(this.app, this));
+
 		this.app.workspace.onLayoutReady(() => {
 			void this.onWorkspaceReady();
 		});
@@ -129,7 +148,18 @@ export default class LoreEngineAIPlugin extends Plugin {
 		}
 	}
 
-	private openOnboardingModal(): void {
+	trackAbortController(controller: AbortController): () => void {
+		this.activeAbortControllers.add(controller);
+		return () => {
+			this.activeAbortControllers.delete(controller);
+		};
+	}
+
+	openPingModal(): void {
+		new PingLlmModal(this.app, this).open();
+	}
+
+	openOnboardingModal(): void {
 		new OnboardingWizardModal(
 			this.app,
 			this.settings,
@@ -182,6 +212,11 @@ export default class LoreEngineAIPlugin extends Plugin {
 	}
 
 	onunload(): void {
+		for (const controller of this.activeAbortControllers) {
+			controller.abort();
+		}
+		this.activeAbortControllers.clear();
+
 		this.unsubscribeDirty?.();
 		this.unsubscribeDirty = null;
 		this.graphStorage?.close();

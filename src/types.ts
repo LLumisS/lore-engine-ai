@@ -114,8 +114,10 @@ export interface PluginSettings {
 	cloudConsentGiven: boolean;
 	apiKeys: Partial<Record<LlmProviderId, string>>;
 	modelName: string;
+	chatModels: Partial<Record<LlmProviderId, string>>;
 	embeddingProvider: LlmProviderId;
 	embeddingModel: string;
+	embeddingModels: Partial<Record<LlmProviderId, string>>;
 	ollamaUrl: string;
 	sessionFolder: string;
 	sessionNumberPattern: string;

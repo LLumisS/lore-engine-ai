@@ -1,10 +1,25 @@
 import type {
 	ExperimentFlags,
+	LlmProviderId,
 	PluginSettings,
 	ScoringWeights,
 	StatusMappings,
 	TypeMapping,
 } from './types';
+
+export const DEFAULT_CHAT_MODELS: Partial<Record<LlmProviderId, string>> = {
+	ollama: '',
+	openai: '',
+	anthropic: '',
+	gemini: '',
+};
+
+export const DEFAULT_EMBEDDING_MODELS: Partial<Record<LlmProviderId, string>> =
+{
+	ollama: '',
+	openai: '',
+	gemini: '',
+};
 
 export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
 	semantic: 0.35,
@@ -55,8 +70,10 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	cloudConsentGiven: false,
 	apiKeys: {},
 	modelName: 'llama3.1:8b',
+	chatModels: { ...DEFAULT_CHAT_MODELS },
 	embeddingProvider: 'ollama',
 	embeddingModel: 'nomic-embed-text',
+	embeddingModels: { ...DEFAULT_EMBEDDING_MODELS },
 	ollamaUrl: 'http://localhost:11434',
 	sessionFolder: 'Sessions',
 	sessionNumberPattern: '(?:Сесія|Session|Сессия)\\s*#?(\\d+)',
@@ -105,6 +122,14 @@ export function deepMergeSettings(
 		apiKeys: {
 			...defaults.apiKeys,
 			...(source.apiKeys ?? {}),
+		},
+		chatModels: {
+			...defaults.chatModels,
+			...(source.chatModels ?? {}),
+		},
+		embeddingModels: {
+			...defaults.embeddingModels,
+			...(source.embeddingModels ?? {}),
 		},
 		typeMappings,
 		statusMappings: {

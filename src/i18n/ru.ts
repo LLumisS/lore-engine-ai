@@ -51,4 +51,80 @@ export const ru: TranslationDictionary = {
 	onboardingSaveButton: 'Подтвердить и синхронизировать',
 	onboardingCancelButton: 'Отмена',
 	onboardingSavedNotice: 'Настройки сохранены, граф синхронизирован.',
+	commandPingLlmName: 'Проверить LLM',
+	pingModalTitle: 'Проверка подключения к LLM',
+	pingProviderInfo: 'Провайдер: {provider} | Модель: {model}',
+	pingEmbeddingInfo: 'Эмбеддинги: {provider} | Модель: {model}',
+	pingPromptLabel: 'Тестовый запрос',
+	pingDefaultPrompt:
+		'Привет! Дай короткий ответ одним предложением для проверки связи с LoreEngine AI.',
+	pingStartButton: 'Отправить (стриминг)',
+	pingEmbeddingButton: 'Проверить эмбеддинги',
+	pingAbortButton: 'Остановить',
+	pingStatusIdle: 'Готово к проверке.',
+	pingStatusStreaming: 'Получение потокового ответа...',
+	pingStatusEmbedding: 'Проверка модели эмбеддингов...',
+	pingStatusEmbeddingDone:
+		'Эмбеддинги готовы: размерность вектора {dim} ({ms} мс).',
+	pingEmbeddingUnsupported:
+		'Выбранный провайдер эмбеддингов не поддерживает векторизацию.',
+	pingStatusDone: 'Завершено. Токены (вход/вихід): {input} / {output}',
+	pingStatusAborted: 'Генерация остановлена пользователем.',
+	settingsHeadingLlm: 'Настройки LLM и эмбеддингов',
+	settingsHeadingPrivacy: 'Приватность и облачные провайдеры',
+	settingsHeadingVault: 'Структура хранилища',
+	settingsPrivacyNotice:
+		'По умолчанию плагин работает локально через Ollama. API-ключи хранятся открытым текстом в локальном файле data.json хранилища. Локальные логи трассировки (traces.jsonl) могут содержать фрагменты заметок.',
+	settingsCloudConsentName: 'Согласие на передачу контекста облачным LLM',
+	settingsCloudConsentDesc:
+		'Разрешить отправку собранных фрагментов заметок и запросов в выбранный облачный API (OpenAI, Anthropic, Gemini).',
+	settingsOllamaUrlName: 'URL локального сервера Ollama',
+	settingsOllamaUrlDesc: 'По умолчанию: http://localhost:11434',
+	settingsRefreshModelsBtn: 'Обновить список моделей Ollama',
+	settingsModelsLoadedNotice: 'Найдено моделей Ollama: {count}',
+	settingsModelName: 'Модель чата',
+	settingsModelDesc:
+		'Название модели для генерации ответов и извлечения событий (напр. llama3.1:8b, gpt-4o-mini, claude-3-5-sonnet-latest, gemini-2.5-flash).',
+	settingsEmbeddingProviderName: 'Провайдер эмбеддингов',
+	settingsEmbeddingProviderDesc:
+		'Выберите провайдера векторных эмбеддингов.',
+	settingsEmbeddingModelName: 'Модель эмбеддингов',
+	settingsEmbeddingModelDesc:
+		'Например: nomic-embed-text, text-embedding-3-small, text-embedding-004.',
+	settingsApiKeyName: 'API-ключ',
+	settingsApiKeyDesc:
+		'Ключ доступа для выбранного облачного провайдера ({provider}).',
+	settingsApiKeyOpenAiName: 'API-ключ OpenAI',
+	settingsApiKeyAnthropicName: 'API-ключ Anthropic',
+	settingsApiKeyGeminiName: 'API-ключ Google Gemini',
+	settingsApiKeyPlaceholder: 'Введите ключ API...',
+	settingsTestLlmName: 'Проверка связи с LLM',
+	settingsTestLlmDesc:
+		'Открыть окно тестового потокового запроса к текущему провайдеру.',
+	settingsOpenOnboardingName: 'Мастер настройки хранилища',
+	settingsOpenOnboardingDesc:
+		'Повторно запустить автоопределение папок сессий, классов сущностей и тегов.',
+	consentModalTitle: 'Согласие на использование облачного LLM-провайдера',
+	consentModalBody:
+		'Вы выбираете облачного провайдера ({provider}). При запросах плагин будет отправлять собранные фрагменты релевантных заметок вашего хранилища и текст запроса на серверы этого провайдера. Скрытой телеметрии нет. Вы можете в любой момент отозвать согласие в настройках.',
+	consentAcceptButton: 'Дать согласие',
+	consentDeclineButton: 'Оставить локальную Ollama',
+	llmErrorCloudConsent:
+		'Облачные вызовы заблокированы: дайте явное согласие на передачу контекста в настройках LoreEngine AI.',
+	llmErrorAuth:
+		'Ошибка авторизации ({provider}, HTTP {status}): проверьте правильность API-ключа в настройках.',
+	llmErrorModelNotFound:
+		'Модель «{model}» не найдена у провайдера {provider} (HTTP 404). Проверьте название модели.',
+	llmErrorRateLimit:
+		'Превышен лимит запросов ({provider}, HTTP 429). {retryHint}',
+	llmErrorRetryAfter: 'Попробуйте повторить через {seconds} с.',
+	llmErrorOllamaCors:
+		'Не удалось подключиться к Ollama ({url}). Убедитесь, что сервер Ollama запущен, а при ошибке CORS задайте переменную окружения OLLAMA_ORIGINS=app://obsidian.md* перед запуском Ollama.',
+	llmErrorNetwork:
+		'Ошибка сети или CORS при обращении к {provider}: {details}',
+	llmErrorContextLength:
+		'Превышен максимальный размер контекстного окна модели ({provider}): {details}',
+	llmErrorInvalidJson:
+		'Провайдер {provider} вернул некорректный JSON: {details}',
+	llmErrorGeneric: 'Ошибка провайдера {provider}: {details}',
 };
