@@ -1,0 +1,529 @@
+{
+	"nodes": [
+		{
+			"id": "World/NPC/Baron Keld.md",
+			"title": "Baron Keld",
+			"aliases": ["Барон Келд", "Келд", "Лорд Окхейвена"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "живий",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#npc", "#статус/живий"],
+			"metadata": { "type": "NPC", "faction": "Silver Crown" },
+			"content": "Барон Келд — правитель [[World/Locations/Oakhaven.md|Окхейвена]], союзник [[World/Factions/Silver Crown.md|Срібної Корони]].",
+			"sections": [
+				{
+					"heading": "",
+					"content": "Барон Келд — правитель Окхейвена.",
+					"tokenCount": 14
+				}
+			],
+			"tokenCount": 24,
+			"inDegree": 3,
+			"outDegree": 2,
+			"mtime": 1700000100,
+			"isDirty": false
+		},
+		{
+			"id": "World/NPC/Captain Mira.md",
+			"title": "Captain Mira",
+			"aliases": ["Капітан Міра", "Міра"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "активна",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#npc", "#статус/активна"],
+			"metadata": { "type": "NPC" },
+			"content": "Капітан міської варти Окхейвена.",
+			"sections": [{ "heading": "", "content": "Капітан міської варти Окхейвена.", "tokenCount": 12 }],
+			"tokenCount": 12,
+			"inDegree": 1,
+			"outDegree": 2,
+			"mtime": 1700000101,
+			"isDirty": false
+		},
+		{
+			"id": "World/NPC/Archivist Vorn.md",
+			"title": "Archivist Vorn",
+			"aliases": ["Архіваріус Ворн"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "INACTIVE",
+				"statusNote": "зник",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#npc", "#статус/зник"],
+			"metadata": { "type": "NPC" },
+			"content": "Зник безвісти під час експедиції до Болотяної вежі.",
+			"sections": [{ "heading": "", "content": "Зник безвісти під час експедиції до Болотяної вежі.", "tokenCount": 18 }],
+			"tokenCount": 18,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000102,
+			"isDirty": false
+		},
+		{
+			"id": "World/NPC/Blacksmith Torin.md",
+			"title": "Blacksmith Torin",
+			"aliases": ["Коваль Торін"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "живий",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#npc", "#живий"],
+			"metadata": { "type": "NPC" },
+			"content": "Коваль у місті Окхейвен.",
+			"sections": [{ "heading": "", "content": "Коваль у місті Окхейвен.", "tokenCount": 10 }],
+			"tokenCount": 10,
+			"inDegree": 1,
+			"outDegree": 2,
+			"mtime": 1700000103,
+			"isDirty": false
+		},
+		{
+			"id": "World/NPC/Whisperer Nika.md",
+			"title": "Whisperer Nika",
+			"aliases": ["Шептунка Ніка"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#npc"],
+			"metadata": { "type": "NPC" },
+			"content": "Таємний інформатор Гільдії Тіней.",
+			"sections": [{ "heading": "", "content": "Таємний інформатор Гільдії Тіней.", "tokenCount": 12 }],
+			"tokenCount": 12,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000104,
+			"isDirty": false
+		},
+		{
+			"id": "World/NPC/Necromancer Malcor.md",
+			"title": "Necromancer Malcor",
+			"aliases": ["Малкор"],
+			"type": "NPC",
+			"staticState": {
+				"statusType": "TERMINATED",
+				"statusNote": "мертвий",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#npc", "#статус/мертвий"],
+			"metadata": { "type": "NPC" },
+			"content": "Загинув у битві за Чорну цитадель.",
+			"sections": [{ "heading": "", "content": "Загинув у битві за Чорну цитадель.", "tokenCount": 14 }],
+			"tokenCount": 14,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000105,
+			"isDirty": false
+		},
+		{
+			"id": "World/Locations/Oakhaven.md",
+			"title": "Oakhaven",
+			"aliases": ["Окхейвен"],
+			"type": "LOCATION",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "відвідано",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#location", "#відвідано"],
+			"metadata": { "type": "LOCATION" },
+			"content": "Портове місто на перехресті торгових шляхів.",
+			"sections": [{ "heading": "", "content": "Портове місто на перехресті торгових шляхів.", "tokenCount": 16 }],
+			"tokenCount": 16,
+			"inDegree": 4,
+			"outDegree": 2,
+			"mtime": 1700000106,
+			"isDirty": false
+		},
+		{
+			"id": "World/Locations/Swamp Tower.md",
+			"title": "Swamp Tower",
+			"aliases": ["Болотяна вежа"],
+			"type": "LOCATION",
+			"staticState": {
+				"statusType": "TERMINATED",
+				"statusNote": "зруйновано",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#location", "#статус/зруйновано"],
+			"metadata": { "type": "LOCATION" },
+			"content": "Давня вежа на північ від Окхейвена.",
+			"sections": [{ "heading": "", "content": "Давня вежа на північ від Окхейвена.", "tokenCount": 14 }],
+			"tokenCount": 14,
+			"inDegree": 2,
+			"outDegree": 1,
+			"mtime": 1700000107,
+			"isDirty": false
+		},
+		{
+			"id": "World/Locations/Black Citadel.md",
+			"title": "Black Citadel",
+			"aliases": ["Чорна цитадель"],
+			"type": "LOCATION",
+			"staticState": {
+				"statusType": "INACTIVE",
+				"statusNote": "приховано",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#location", "#приховано"],
+			"metadata": { "type": "LOCATION" },
+			"content": "Закинута фортеця у горах.",
+			"sections": [{ "heading": "", "content": "Закинута фортеця у горах.", "tokenCount": 10 }],
+			"tokenCount": 10,
+			"inDegree": 2,
+			"outDegree": 0,
+			"mtime": 1700000108,
+			"isDirty": false
+		},
+		{
+			"id": "World/Locations/Rusty Anchor Tavern.md",
+			"title": "Rusty Anchor Tavern",
+			"aliases": ["Таверна Іржавий Якір"],
+			"type": "LOCATION",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "відвідано",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#location", "#відвідано"],
+			"metadata": { "type": "LOCATION" },
+			"content": "Улюблена таверна авантюристів у Окхейвені.",
+			"sections": [{ "heading": "", "content": "Улюблена таверна авантюристів у Окхейвені.", "tokenCount": 15 }],
+			"tokenCount": 15,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000109,
+			"isDirty": false
+		},
+		{
+			"id": "World/Factions/Silver Crown.md",
+			"title": "Silver Crown",
+			"aliases": ["Срібна Корона"],
+			"type": "FACTION",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "активна",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#faction", "#активна"],
+			"metadata": { "type": "FACTION" },
+			"content": "Правляча ліга благородних домів.",
+			"sections": [{ "heading": "", "content": "Правляча ліга благородних домів.", "tokenCount": 12 }],
+			"tokenCount": 12,
+			"inDegree": 2,
+			"outDegree": 1,
+			"mtime": 1700000110,
+			"isDirty": false
+		},
+		{
+			"id": "World/Factions/Shadow Guild.md",
+			"title": "Shadow Guild",
+			"aliases": ["Гільдія Тіней"],
+			"type": "FACTION",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "активна",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#faction", "#активна"],
+			"metadata": { "type": "FACTION" },
+			"content": "Підпільна мережа контрабандистів і шпигунів.",
+			"sections": [{ "heading": "", "content": "Підпільна мережа контрабандистів і шпигунів.", "tokenCount": 15 }],
+			"tokenCount": 15,
+			"inDegree": 2,
+			"outDegree": 1,
+			"mtime": 1700000111,
+			"isDirty": false
+		},
+		{
+			"id": "World/Quests/Find the Heir.md",
+			"title": "Find the Heir",
+			"aliases": ["Знайти спадкоємця"],
+			"type": "QUEST",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "в процесі",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#quest", "#в_процесі"],
+			"metadata": { "type": "QUEST" },
+			"content": "Розслідування зникнення спадкоємця Барона Келда.",
+			"sections": [{ "heading": "", "content": "Розслідування зникнення спадкоємця Барона Келда.", "tokenCount": 18 }],
+			"tokenCount": 18,
+			"inDegree": 1,
+			"outDegree": 2,
+			"mtime": 1700000112,
+			"isDirty": false
+		},
+		{
+			"id": "World/Quests/Clear Swamp Tower.md",
+			"title": "Clear Swamp Tower",
+			"aliases": ["Очистити Болотяну вежу"],
+			"type": "QUEST",
+			"staticState": {
+				"statusType": "TERMINATED",
+				"statusNote": "завершено",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#quest", "#завершено"],
+			"metadata": { "type": "QUEST" },
+			"content": "Зачистка Болотяної вежі від культистів.",
+			"sections": [{ "heading": "", "content": "Зачистка Болотяної вежі від культистів.", "tokenCount": 14 }],
+			"tokenCount": 14,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000113,
+			"isDirty": false
+		},
+		{
+			"id": "World/Quests/Siege of Black Citadel.md",
+			"title": "Siege of Black Citadel",
+			"aliases": ["Облога Чорної цитаделі"],
+			"type": "QUEST",
+			"staticState": {
+				"statusType": "INACTIVE",
+				"statusNote": "не розпочато",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#quest", "#не_розпочато"],
+			"metadata": { "type": "QUEST" },
+			"content": "Підготовка штурму Чорної цитаделі.",
+			"sections": [{ "heading": "", "content": "Підготовка штурму Чорної цитаделі.", "tokenCount": 12 }],
+			"tokenCount": 12,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000114,
+			"isDirty": false
+		},
+		{
+			"id": "World/Items/Sunblade.md",
+			"title": "Sunblade",
+			"aliases": ["Сонячний клинок"],
+			"type": "ITEM",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#item"],
+			"metadata": { "type": "ITEM" },
+			"content": "Древній меч, викуваний для боротьби з нежиттю.",
+			"sections": [{ "heading": "", "content": "Древній меч, викуваний для боротьби з нежиттю.", "tokenCount": 16 }],
+			"tokenCount": 16,
+			"inDegree": 2,
+			"outDegree": 0,
+			"mtime": 1700000115,
+			"isDirty": false
+		},
+		{
+			"id": "World/Items/Seal of Oakhaven.md",
+			"title": "Seal of Oakhaven",
+			"aliases": ["Печатка Окхейвена"],
+			"type": "ITEM",
+			"staticState": {
+				"statusType": "ACTIVE",
+				"statusNote": "активний",
+				"sessionUpdated": null,
+				"source": "TAG"
+			},
+			"tags": ["#item", "#активний"],
+			"metadata": { "type": "ITEM" },
+			"content": "Родова реліквія дому Келдів.",
+			"sections": [{ "heading": "", "content": "Родова реліквія дому Келдів.", "tokenCount": 12 }],
+			"tokenCount": 12,
+			"inDegree": 1,
+			"outDegree": 1,
+			"mtime": 1700000116,
+			"isDirty": false
+		},
+		{
+			"id": "Sessions/Session 1.md",
+			"title": "Session 1",
+			"aliases": ["Сесія 1"],
+			"type": "SESSION_LOG",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#session"],
+			"metadata": { "type": "SESSION_LOG", "session": 1 },
+			"content": "Герої прибули до Окхейвена та зустрілися з Бароном Келдом.",
+			"sections": [{ "heading": "", "content": "Герої прибули до Окхейвена та зустрілися з Бароном Келдом.", "tokenCount": 20 }],
+			"tokenCount": 20,
+			"inDegree": 0,
+			"outDegree": 2,
+			"mtime": 1700000117,
+			"isDirty": false
+		},
+		{
+			"id": "Sessions/Session 2.md",
+			"title": "Session 2",
+			"aliases": ["Сесія 2"],
+			"type": "SESSION_LOG",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#session"],
+			"metadata": { "type": "SESSION_LOG", "session": 2 },
+			"content": "Під час заколоту Гільдії Тіней Барона Келда було вбито у його залі.",
+			"sections": [{ "heading": "", "content": "Під час заколоту Гільдії Тіней Барона Келда було вбито у його залі.", "tokenCount": 24 }],
+			"tokenCount": 24,
+			"inDegree": 0,
+			"outDegree": 2,
+			"mtime": 1700000118,
+			"isDirty": false
+		},
+		{
+			"id": "Lore/Ancient Myth.md",
+			"title": "Ancient Myth",
+			"aliases": ["Давній міф"],
+			"type": "LORE",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#lore"],
+			"metadata": { "type": "LORE" },
+			"content": "Ізольована легенда про створення світу без жодних зв'язків.",
+			"sections": [{ "heading": "", "content": "Ізольована легенда про створення світу без жодних зв'язків.", "tokenCount": 20 }],
+			"tokenCount": 20,
+			"inDegree": 0,
+			"outDegree": 0,
+			"mtime": 1700000119,
+			"isDirty": false
+		},
+		{
+			"id": "Meta/World Index.md",
+			"title": "World Index",
+			"aliases": ["Індекс світу"],
+			"type": "META",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#meta"],
+			"metadata": { "type": "META" },
+			"content": "Головна навігаційна нотатка-хаб кампанії.",
+			"sections": [{ "heading": "", "content": "Головна навігаційна нотатка-хаб кампанії.", "tokenCount": 14 }],
+			"tokenCount": 14,
+			"inDegree": 0,
+			"outDegree": 10,
+			"mtime": 1700000120,
+			"isDirty": false
+		},
+		{
+			"id": "Archive/Old Draft.md",
+			"title": "Old Draft",
+			"aliases": [],
+			"type": "UNTYPED",
+			"staticState": {
+				"statusType": "UNKNOWN",
+				"statusNote": "",
+				"sessionUpdated": null,
+				"source": "DEFAULT"
+			},
+			"tags": ["#wip"],
+			"metadata": { "ai_ignore": true },
+			"content": "Чорновий опис, який не має потрапляти у граф.",
+			"sections": [{ "heading": "", "content": "Чорновий опис.", "tokenCount": 8 }],
+			"tokenCount": 8,
+			"inDegree": 0,
+			"outDegree": 1,
+			"mtime": 1700000121,
+			"isDirty": true
+		}
+	],
+	"edges": [
+		{ "sourceId": "World/NPC/Baron Keld.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Baron Keld.md", "targetId": "World/Factions/Silver Crown.md", "kind": "FRONTMATTER" },
+		{ "sourceId": "World/NPC/Captain Mira.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Captain Mira.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Archivist Vorn.md", "targetId": "World/Locations/Swamp Tower.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Blacksmith Torin.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Blacksmith Torin.md", "targetId": "World/Items/Sunblade.md", "kind": "EMBED" },
+		{ "sourceId": "World/NPC/Whisperer Nika.md", "targetId": "World/Factions/Shadow Guild.md", "kind": "LINK" },
+		{ "sourceId": "World/NPC/Necromancer Malcor.md", "targetId": "World/Locations/Black Citadel.md", "kind": "LINK" },
+		{ "sourceId": "World/Locations/Oakhaven.md", "targetId": "World/Factions/Silver Crown.md", "kind": "LINK" },
+		{ "sourceId": "World/Locations/Oakhaven.md", "targetId": "World/Locations/Rusty Anchor Tavern.md", "kind": "LINK" },
+		{ "sourceId": "World/Locations/Swamp Tower.md", "targetId": "World/NPC/Necromancer Malcor.md", "kind": "LINK" },
+		{ "sourceId": "World/Locations/Rusty Anchor Tavern.md", "targetId": "World/NPC/Whisperer Nika.md", "kind": "LINK" },
+		{ "sourceId": "World/Factions/Silver Crown.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "World/Factions/Shadow Guild.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "World/Quests/Find the Heir.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "World/Quests/Find the Heir.md", "targetId": "World/NPC/Archivist Vorn.md", "kind": "LINK" },
+		{ "sourceId": "World/Quests/Clear Swamp Tower.md", "targetId": "World/Locations/Swamp Tower.md", "kind": "LINK" },
+		{ "sourceId": "World/Quests/Siege of Black Citadel.md", "targetId": "World/Locations/Black Citadel.md", "kind": "LINK" },
+		{ "sourceId": "World/Items/Seal of Oakhaven.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "Sessions/Session 1.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "Sessions/Session 1.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "Sessions/Session 2.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "Sessions/Session 2.md", "targetId": "World/Factions/Shadow Guild.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/NPC/Captain Mira.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/NPC/Archivist Vorn.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/NPC/Blacksmith Torin.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Locations/Oakhaven.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Locations/Swamp Tower.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Factions/Silver Crown.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Factions/Shadow Guild.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Quests/Find the Heir.md", "kind": "LINK" },
+		{ "sourceId": "Meta/World Index.md", "targetId": "World/Items/Sunblade.md", "kind": "LINK" },
+		{ "sourceId": "Archive/Old Draft.md", "targetId": "World/NPC/Baron Keld.md", "kind": "LINK" }
+	],
+	"events": [
+		{
+			"id": "evt-session2-keld",
+			"sessionId": 2,
+			"sourceNoteId": "Sessions/Session 2.md",
+			"subjects": ["Барон Келд", "Гільдія Тіней"],
+			"subjectIds": ["World/NPC/Baron Keld.md", "World/Factions/Shadow Guild.md"],
+			"action": "вбивство",
+			"details": "Агенти Гільдії Тіней вбили Барона Келда під час перевороту в Окхейвені.",
+			"stateChanges": [
+				{
+					"subject": "Барон Келд",
+					"newStatusType": "TERMINATED",
+					"newStatusNote": "вбитий під час заколоту"
+				}
+			],
+			"userVerified": true,
+			"createdAt": 1700000500
+		}
+	]
+}
