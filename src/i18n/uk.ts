@@ -36,15 +36,47 @@ export const uk = {
 	onboardingAutoDetectedNotice: 'Структуру сховища проаналізовано.',
 	onboardingSessionFolderName: 'Папка логів сесій',
 	onboardingSessionFolderDesc:
-		'Шлях до папки зі звітами сесій (наприклад: Sessions, Сесії, Сессии).',
+		'Оберіть папку зі звітами сесій через провідник або підказки.',
+	onboardingBrowseFolderBtn: 'Огляд...',
+	folderPickerModalTitle: 'Оберіть папку сховища',
+	folderPickerSearchPlaceholder: 'Фільтр папок...',
+	folderPickerEmpty: 'Папок не знайдено.',
 	onboardingTypeMappingsName: 'Правила класифікації сутностей',
 	onboardingTypeMappingsDesc:
-		'По одному правилу на рядок: folder:Шлях=TYPE або tag:#тег=TYPE',
+		'Зіставте папки або теги сховища з класами сутностей (працюють підказки при введенні).',
+	onboardingAddRuleBtn: '+ Додати правило',
+	onboardingRuleKindFolder: 'Папка',
+	onboardingRuleKindTag: 'Тег',
+	onboardingRuleFolderPlaceholder: 'Шлях до папки (напр. World/NPC/)',
+	onboardingRuleTagPlaceholder: 'Тег (напр. #npc)',
+	onboardingRuleDeleteBtn: 'Видалити',
+	onboardingActiveTagsName:
+		'Значення тегів стану ACTIVE (живий / активний / у процесі)',
+	onboardingActiveTagsDesc:
+		'Вкажіть лише значущу частину тегу (напр. живий, активний, в_процесі) без префікса #x/.',
 	onboardingTerminatedTagsName:
-		'Теги стану TERMINATED (загинув / завершено / зруйновано)',
-	onboardingTerminatedTagsDesc: 'Перелік тегів через кому',
-	onboardingInactiveTagsName: 'Теги стану INACTIVE (зник / не розпочато)',
-	onboardingInactiveTagsDesc: 'Перелік тегів через кому',
+		'Значення тегів стану TERMINATED (загинув / завершено / зруйновано)',
+	onboardingTerminatedTagsDesc:
+		'Вкажіть лише значущу частину тегу (напр. мертвий, погиб, зруйновано, завершено).',
+	onboardingInactiveTagsName:
+		'Значення тегів стану INACTIVE (зник / не знайдено / не розпочато)',
+	onboardingInactiveTagsDesc:
+		'Вкажіть лише значущу частину тегу (напр. не_найдено, зник, пропал) — спрацює для будь-якого #x/не_найдено.',
+	onboardingTagInputPlaceholder:
+		'Введіть частину тегу (напр. не_найдено) або оберіть з підказок',
+	onboardingAddTagBtn: '+ Додати',
+	onboardingEditBulkBtn: 'Текст списком',
+	noteBarTitle: 'LoreEngine',
+	noteBarClassLabel: 'Клас:',
+	noteBarStatusLabel: 'Статус:',
+	noteBarNotePlaceholder: 'Примітка стану...',
+	noteBarAutoPrefix: 'Авто',
+	noteBarSavedNotice: 'Оновлено у графі: {title} ({type} / {status})',
+	commandToggleNoteBarName: 'Показати/сховати панель класу і статусу нотатки',
+	ribbonToggleNoteBarTooltip: 'Панель класу і статусу нотатки',
+	settingsShowNoteBarName: 'Показувати панель класу і статусу у нотатці',
+	settingsShowNoteBarDesc:
+		'Відображати компактну панель LoreEngine над текстом кожної відкритої нотатки.',
 	onboardingSaveButton: 'Підтвердити та синхронізувати',
 	onboardingCancelButton: 'Скасувати',
 	onboardingSavedNotice: 'Налаштування збережено, граф синхронізовано.',

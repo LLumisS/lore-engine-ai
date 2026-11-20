@@ -41,16 +41,47 @@ export const en: TranslationDictionary = {
 	onboardingAutoDetectedNotice: 'Vault structure analyzed.',
 	onboardingSessionFolderName: 'Session logs folder',
 	onboardingSessionFolderDesc:
-		'Path to the folder with session logs (e.g. Sessions, Сесії, Сессии).',
+		'Choose the session logs folder via explorer or suggestions.',
+	onboardingBrowseFolderBtn: 'Browse...',
+	folderPickerModalTitle: 'Select vault folder',
+	folderPickerSearchPlaceholder: 'Filter folders...',
+	folderPickerEmpty: 'No folders found.',
 	onboardingTypeMappingsName: 'Entity type rules',
 	onboardingTypeMappingsDesc:
-		'One rule per line: folder:Path=TYPE or tag:#tag=TYPE',
+		'Map vault folders or tags to entity classes (autocomplete suggestions enabled).',
+	onboardingAddRuleBtn: '+ Add rule',
+	onboardingRuleKindFolder: 'Folder',
+	onboardingRuleKindTag: 'Tag',
+	onboardingRuleFolderPlaceholder: 'Folder path (e.g. World/NPC/)',
+	onboardingRuleTagPlaceholder: 'Tag (e.g. #npc)',
+	onboardingRuleDeleteBtn: 'Remove',
+	onboardingActiveTagsName:
+		'ACTIVE status tag values (alive / active / ongoing)',
+	onboardingActiveTagsDesc:
+		'Enter only the meaningful tag segment (e.g. alive, active, ongoing) without the #x/ prefix.',
 	onboardingTerminatedTagsName:
-		'TERMINATED status tags (dead / completed / destroyed)',
-	onboardingTerminatedTagsDesc: 'Comma-separated list of tags',
+		'TERMINATED status tag values (dead / completed / destroyed)',
+	onboardingTerminatedTagsDesc:
+		'Enter only the meaningful tag segment (e.g. dead, destroyed, completed).',
 	onboardingInactiveTagsName:
-		'INACTIVE status tags (missing / not started)',
-	onboardingInactiveTagsDesc: 'Comma-separated list of tags',
+		'INACTIVE status tag values (missing / not found / not started)',
+	onboardingInactiveTagsDesc:
+		'Enter only the meaningful tag segment (e.g. not_found, missing) — matches any #x/not_found.',
+	onboardingTagInputPlaceholder:
+		'Enter tag segment (e.g. not_found) or pick from suggestions',
+	onboardingAddTagBtn: '+ Add',
+	onboardingEditBulkBtn: 'Bulk text',
+	noteBarTitle: 'LoreEngine',
+	noteBarClassLabel: 'Class:',
+	noteBarStatusLabel: 'Status:',
+	noteBarNotePlaceholder: 'Status note...',
+	noteBarAutoPrefix: 'Auto',
+	noteBarSavedNotice: 'Updated in graph: {title} ({type} / {status})',
+	commandToggleNoteBarName: 'Toggle note class and status bar',
+	ribbonToggleNoteBarTooltip: 'Toggle note class and status bar',
+	settingsShowNoteBarName: 'Show class and status bar in notes',
+	settingsShowNoteBarDesc:
+		'Display a compact LoreEngine bar above each open note.',
 	onboardingSaveButton: 'Confirm and sync',
 	onboardingCancelButton: 'Cancel',
 	onboardingSavedNotice: 'Settings saved and graph synced.',

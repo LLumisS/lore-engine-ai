@@ -38,16 +38,47 @@ export const ru: TranslationDictionary = {
 	onboardingAutoDetectedNotice: 'Структура хранилища проанализирована.',
 	onboardingSessionFolderName: 'Папка логов сессий',
 	onboardingSessionFolderDesc:
-		'Путь к папке с отчётами сессий (например: Sessions, Сесії, Сессии).',
+		'Выберите папку с отчётами сессий через проводник или подсказки.',
+	onboardingBrowseFolderBtn: 'Обзор...',
+	folderPickerModalTitle: 'Выберите папку хранилища',
+	folderPickerSearchPlaceholder: 'Фильтр папок...',
+	folderPickerEmpty: 'Папки не найдены.',
 	onboardingTypeMappingsName: 'Правила классификации сущностей',
 	onboardingTypeMappingsDesc:
-		'По одному правилу на строку: folder:Путь=TYPE или tag:#тег=TYPE',
+		'Сопоставьте папки или теги хранилища с классами сущностей (доступно автодополнение).',
+	onboardingAddRuleBtn: '+ Добавить правило',
+	onboardingRuleKindFolder: 'Папка',
+	onboardingRuleKindTag: 'Тег',
+	onboardingRuleFolderPlaceholder: 'Путь к папке (напр. World/NPC/)',
+	onboardingRuleTagPlaceholder: 'Тег (напр. #npc)',
+	onboardingRuleDeleteBtn: 'Удалить',
+	onboardingActiveTagsName:
+		'Значения тегов состояния ACTIVE (живой / активный / в процессе)',
+	onboardingActiveTagsDesc:
+		'Укажите только значимую часть тега (напр. живой, активный, в_процессе) без префикса #x/.',
 	onboardingTerminatedTagsName:
-		'Теги состояния TERMINATED (погиб / завершено / разрушено)',
-	onboardingTerminatedTagsDesc: 'Список тегов через запятую',
+		'Значения тегов состояния TERMINATED (погиб / завершено / разрушено)',
+	onboardingTerminatedTagsDesc:
+		'Укажите только значимую часть тега (напр. мертвый, погиб, разрушено, завершено).',
 	onboardingInactiveTagsName:
-		'Теги состояния INACTIVE (пропал / не начато)',
-	onboardingInactiveTagsDesc: 'Список тегов через запятую',
+		'Значения тегов состояния INACTIVE (пропал / не найдено / не начато)',
+	onboardingInactiveTagsDesc:
+		'Укажите только значимую часть тега (напр. не_найдено, зник, пропал) — сработает для любого #x/не_найдено.',
+	onboardingTagInputPlaceholder:
+		'Введите часть тега (напр. не_найдено) или выберите из подсказок',
+	onboardingAddTagBtn: '+ Добавить',
+	onboardingEditBulkBtn: 'Текст списком',
+	noteBarTitle: 'LoreEngine',
+	noteBarClassLabel: 'Класс:',
+	noteBarStatusLabel: 'Статус:',
+	noteBarNotePlaceholder: 'Примечание статуса...',
+	noteBarAutoPrefix: 'Авто',
+	noteBarSavedNotice: 'Обновлено в графе: {title} ({type} / {status})',
+	commandToggleNoteBarName: 'Показать/скрыть панель класса и статуса заметки',
+	ribbonToggleNoteBarTooltip: 'Панель класса и статуса заметки',
+	settingsShowNoteBarName: 'Показывать панель класса и статуса в заметке',
+	settingsShowNoteBarDesc:
+		'Отображать компактную панель LoreEngine над текстом каждой открытой заметки.',
 	onboardingSaveButton: 'Подтвердить и синхронизировать',
 	onboardingCancelButton: 'Отмена',
 	onboardingSavedNotice: 'Настройки сохранены, граф синхронизирован.',

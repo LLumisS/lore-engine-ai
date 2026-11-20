@@ -29,6 +29,7 @@ export interface LoreEnginePluginHost extends Plugin {
 	saveSettings(): Promise<void>;
 	openPingModal(): void;
 	openOnboardingModal(): void;
+	toggleNoteBarVisibility(visible: boolean): Promise<void>;
 	trackAbortController(controller: AbortController): () => void;
 }
 
@@ -630,6 +631,17 @@ export class LoreEngineSettingTab extends PluginSettingTab {
 						this.host.openOnboardingModal();
 					},
 				);
+			});
+
+		new Setting(containerEl)
+			.setName(t(lang, 'settingsShowNoteBarName'))
+			.setDesc(t(lang, 'settingsShowNoteBarDesc'))
+			.addToggle((toggle) => {
+				toggle
+					.setValue(settings.showNoteBar)
+					.onChange(async (value) => {
+						await this.host.toggleNoteBarVisibility(value);
+					});
 			});
 
 		if (prevScrollTop > 0 || prevParentScrollTop > 0) {

@@ -2,7 +2,7 @@
 	"id": "lore-engine-ai",
 	"name": "LoreEngine AI",
 	"version": "1.0.0",
-	"minAppVersion": "1.0.0",
+	"minAppVersion": "1.6.6",
 	"description": "Context-aware GraphRAG assistant for TTRPG Game Masters (pre-session prep and worldbuilding).",
 	"author": "Obsidian",
 	"authorUrl": "https://obsidian.md",
