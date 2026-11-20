@@ -132,7 +132,6 @@ export interface PluginSettings {
 	mechanicsPromptPath: string;
 	experiment: ExperimentFlags;
 	onboardingDone: boolean;
-	showNoteBar: boolean;
 }
 
 export interface CandidateScoreBreakdown {
