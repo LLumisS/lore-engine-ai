@@ -126,6 +126,16 @@ function extractPlainMetadata(
 	return metadata;
 }
 
+export function parseFrontmatterEntityType(
+	frontmatter?: Record<string, unknown>,
+): EntityType | null {
+	const rawType = frontmatter?.type;
+	if (typeof rawType === 'string' && rawType.trim().length > 0) {
+		return FRONTMATTER_TYPE_ALIASES[rawType.trim().toLowerCase()] ?? null;
+	}
+	return null;
+}
+
 /**
  * Classifies a note's EntityType in order of precedence:
  * frontmatter `type:` -> user `typeMappings` -> `sessionFolder` -> `UNTYPED`.
@@ -136,12 +146,9 @@ export function resolveEntityType(
 	frontmatter: Record<string, unknown> | undefined,
 	settings: PluginSettings,
 ): EntityType {
-	const rawType = frontmatter?.type;
-	if (typeof rawType === 'string' && rawType.trim().length > 0) {
-		const mapped = FRONTMATTER_TYPE_ALIASES[rawType.trim().toLowerCase()];
-		if (mapped) {
-			return mapped;
-		}
+	const explicitType = parseFrontmatterEntityType(frontmatter);
+	if (explicitType) {
+		return explicitType;
 	}
 
 	const normPath = normalizeFilePath(path);
@@ -264,6 +271,24 @@ export function splitNoteIntoSections(
 			];
 }
 
+function mergeFrontmatterOverrides(
+	base: Record<string, unknown> | undefined,
+	overrides?: Record<string, unknown>,
+): Record<string, unknown> | undefined {
+	if (!overrides) {
+		return base;
+	}
+	const merged: Record<string, unknown> = { ...(base ?? {}) };
+	for (const [key, value] of Object.entries(overrides)) {
+		if (value === undefined) {
+			delete merged[key];
+		} else {
+			merged[key] = value;
+		}
+	}
+	return merged;
+}
+
 /**
  * Parses a single Obsidian Markdown file into a GraphNode, or returns `null`
  * if excluded by `.loreignore` or `ai_ignore: true`.
@@ -273,13 +298,19 @@ export async function parseVaultNote(
 	file: TFile,
 	settings: PluginSettings,
 	ignoreRules: LoreIgnoreRules,
+	frontmatterOverrides?: Record<string, unknown>,
 ): Promise<GraphNode | null> {
 	const cache = app.metadataCache.getFileCache(file);
 	const rawTags = cache ? getAllTags(cache) ?? [] : [];
 	const normalizedTags = Array.from(
 		new Set(rawTags.map(normalizeTag).filter((tag) => tag.length > 0)),
 	);
-	const frontmatter: Record<string, unknown> | undefined = cache?.frontmatter;
+	const baseFrontmatter: Record<string, unknown> | undefined =
+		cache?.frontmatter;
+	const frontmatter = mergeFrontmatterOverrides(
+		baseFrontmatter,
+		frontmatterOverrides,
+	);
 
 	if (
 		isNoteIgnored(

@@ -391,6 +391,62 @@ export class GraphIndex {
 		return this.dirtyPaths.size;
 	}
 
+	getNode(id: string): GraphNode | undefined {
+		return this.nodesMap.get(id);
+	}
+
+	/**
+	 * Immediately re-parses a single markdown file (optionally merging fresh
+	 * frontmatter overrides) and updates both the in-memory graph and IndexedDB cache.
+	 */
+	async refreshSingleFile(
+		file: TFile,
+		frontmatterOverrides?: Record<string, unknown>,
+	): Promise<GraphNode | null> {
+		let ignoreRules = parseLoreIgnore(this.lastIgnoreRaw);
+		if (!this.lastIgnoreRaw) {
+			const loaded = await loadLoreIgnoreFromAdapter(
+				this.app.vault.adapter,
+				normalizePath('.loreignore'),
+			);
+			this.lastIgnoreRaw = loaded.raw;
+			ignoreRules = loaded.rules;
+		}
+
+		const parsed = await parseVaultNote(
+			this.app,
+			file,
+			this.getSettings(),
+			ignoreRules,
+			frontmatterOverrides,
+		);
+
+		if (parsed) {
+			this.nodesMap.set(parsed.id, { ...parsed, isDirty: false });
+		} else {
+			this.nodesMap.delete(file.path);
+		}
+		this.dirtyPaths.delete(file.path);
+
+		const validNodeIds = new Set(this.nodesMap.keys());
+		this.edges = buildVaultEdges(this.app, validNodeIds);
+		this.recomputeDegreesInPlace();
+
+		const updated = this.nodesMap.get(file.path) ?? null;
+		if (updated) {
+			updated.isDirty = false;
+		}
+
+		await this.storage.saveSnapshot(
+			this.getNodes(),
+			this.edges,
+			this.lastIgnoreRaw,
+		);
+		this.emitDirtyCount();
+
+		return updated;
+	}
+
 	getNodes(): GraphNode[] {
 		return Array.from(this.nodesMap.values()).sort((a, b) =>
 			a.id.localeCompare(b.id),
