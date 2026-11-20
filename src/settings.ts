@@ -30,8 +30,9 @@ export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
 };
 
 export const DEFAULT_STATUS_MAPPINGS: StatusMappings = {
-	terminatedTags: ['#статус/мертвий', '#статус/мертв', '#status/dead'],
-	inactiveTags: ['#статус/зник', '#статус/пропал', '#status/missing'],
+	activeTags: [],
+	inactiveTags: [],
+	terminatedTags: [],
 };
 
 export const DEFAULT_TYPE_MAPPINGS: TypeMapping[] = [
@@ -87,6 +88,7 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	mechanicsPromptPath: '',
 	experiment: DEFAULT_EXPERIMENT_FLAGS,
 	onboardingDone: false,
+	showNoteBar: false,
 };
 
 function cloneTypeMappings(mappings: TypeMapping[]): TypeMapping[] {
@@ -107,6 +109,10 @@ export function deepMergeSettings(
 	const typeMappings = Array.isArray(source.typeMappings)
 		? cloneTypeMappings(source.typeMappings)
 		: cloneTypeMappings(defaults.typeMappings);
+
+	const activeTags = Array.isArray(source.statusMappings?.activeTags)
+		? [...source.statusMappings.activeTags]
+		: [...defaults.statusMappings.activeTags];
 
 	const terminatedTags = Array.isArray(source.statusMappings?.terminatedTags)
 		? [...source.statusMappings.terminatedTags]
@@ -133,6 +139,7 @@ export function deepMergeSettings(
 		},
 		typeMappings,
 		statusMappings: {
+			activeTags,
 			terminatedTags,
 			inactiveTags,
 		},

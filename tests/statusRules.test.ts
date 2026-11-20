@@ -55,6 +55,7 @@ describe('statusRules negation and pitfalls', () => {
 describe('statusRules user mappings precedence', () => {
 	it('gives user statusMappings priority over built-in stems', () => {
 		const userMappings: StatusMappings = {
+			activeTags: ['#персонаж/звільнений'],
 			terminatedTags: ['#статус/відійшов_у_вічність'],
 			inactiveTags: ['#помер_у_бою'],
 		};
@@ -71,5 +72,43 @@ describe('statusRules user mappings precedence', () => {
 			userMappings,
 		);
 		expect(customTerminated.statusType).toBe('TERMINATED');
+
+		const customActive = resolveStaticState(
+			['#персонаж/звільнений'],
+			null,
+			userMappings,
+		);
+		expect(customActive.statusType).toBe('ACTIVE');
+	});
+
+	it('matches short segment values regardless of #x/ prefix and resolves explicit frontmatter status', () => {
+		const segmentMappings: StatusMappings = {
+			activeTags: ['у_строю'],
+			inactiveTags: ['не_найдено'],
+			terminatedTags: ['знищено'],
+		};
+
+		expect(
+			resolveStaticState(['#предмет/не_найдено'], null, segmentMappings)
+				.statusType,
+		).toBe('INACTIVE');
+		expect(
+			resolveStaticState(
+				['#запись/архив/не_найдено'],
+				null,
+				segmentMappings,
+			).statusType,
+		).toBe('INACTIVE');
+		expect(
+			resolveStaticState(['#персонаж/у_строю'], null, segmentMappings)
+				.statusType,
+		).toBe('ACTIVE');
+
+		const fromFrontmatter = resolveStaticState([], {
+			status: 'TERMINATED',
+			status_note: 'зруйновано у сесії 3',
+		});
+		expect(fromFrontmatter.statusType).toBe('TERMINATED');
+		expect(fromFrontmatter.statusNote).toBe('зруйновано у сесії 3');
 	});
 });

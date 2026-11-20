@@ -123,15 +123,52 @@ function matchesUserPattern(raw: string, pattern: string): boolean {
 	}
 
 	if (patternSegments.length === 1) {
-		const singlePattern = patternSegments[0];
-		return singlePattern !== undefined && rawSegments.includes(singlePattern);
+		const target = patternSegments[0];
+		if (!target) {
+			return false;
+		}
+		for (const seg of rawSegments) {
+			if (seg === target) {
+				return true;
+			}
+			if (target.includes(' ') && seg.startsWith(target)) {
+				return true;
+			}
+			if (!target.includes(' ') && target.length >= 3) {
+				const words = tokenizeNormalizedWords(seg);
+				for (let i = 0; i < words.length; i++) {
+					const word = words[i];
+					if (
+						word &&
+						(word === target || word.startsWith(target)) &&
+						(i === 0 || !NEGATION_TOKENS.has(words[i - 1] ?? ''))
+					) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	if (rawSegments.length < patternSegments.length) {
 		return false;
 	}
 
-	return patternSegments.every((seg, idx) => rawSegments[idx] === seg);
+	for (
+		let start = 0;
+		start <= rawSegments.length - patternSegments.length;
+		start++
+	) {
+		const matched = patternSegments.every(
+			(seg, offset) => rawSegments[start + offset] === seg,
+		);
+		if (matched) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function matchUserMapping(
@@ -151,6 +188,12 @@ function matchUserMapping(
 	for (const tag of statusMappings.inactiveTags) {
 		if (matchesUserPattern(raw, tag)) {
 			return 'INACTIVE';
+		}
+	}
+
+	for (const tag of statusMappings.activeTags) {
+		if (matchesUserPattern(raw, tag)) {
+			return 'ACTIVE';
 		}
 	}
 
@@ -296,15 +339,71 @@ function collectFrontmatterStatusValues(
 	return values;
 }
 
+const EXPLICIT_STATUS_VALUES = new Set<StatusType>([
+	'ACTIVE',
+	'INACTIVE',
+	'TERMINATED',
+	'UNKNOWN',
+]);
+
+function extractExplicitFrontmatterNote(
+	frontmatter?: Record<string, unknown> | null,
+): string {
+	if (!frontmatter) {
+		return '';
+	}
+	for (const key of ['status_note', 'statusNote']) {
+		const val = frontmatter[key];
+		if (typeof val === 'string' && val.trim().length > 0) {
+			return val.trim();
+		}
+	}
+	return '';
+}
+
+function extractExplicitFrontmatterStatus(
+	frontmatter?: Record<string, unknown> | null,
+): StatusType | null {
+	if (!frontmatter) {
+		return null;
+	}
+	for (const key of ['status', 'state', 'статус']) {
+		const raw = frontmatter[key];
+		if (typeof raw === 'string') {
+			const upper = raw.trim().toUpperCase() as StatusType;
+			if (EXPLICIT_STATUS_VALUES.has(upper)) {
+				return upper;
+			}
+		}
+	}
+	return null;
+}
+
 /**
  * Resolves static EntityState from note tags and frontmatter fields.
- * User-configured statusMappings always override built-in stems.
+ * Explicit frontmatter `status` (`ACTIVE|INACTIVE|TERMINATED|UNKNOWN`) and
+ * user-configured `statusMappings` override built-in stems.
  */
 export function resolveStaticState(
 	tags: string[],
 	frontmatter?: Record<string, unknown> | null,
 	statusMappings?: StatusMappings,
 ): EntityState {
+	const explicitNote = extractExplicitFrontmatterNote(frontmatter);
+	const explicitStatus = extractExplicitFrontmatterStatus(frontmatter);
+	if (explicitStatus !== null) {
+		return {
+			statusType: explicitStatus,
+			statusNote:
+				explicitNote ||
+				(explicitStatus === 'UNKNOWN'
+					? ''
+					: explicitStatus.toLowerCase()),
+			sessionUpdated: null,
+			source: 'TAG',
+		};
+	}
+
 	const candidates = [...tags, ...collectFrontmatterStatusValues(frontmatter)];
 
 	let userMatchedStatus: StatusType | null = null;
@@ -325,7 +424,7 @@ export function resolveStaticState(
 	if (userMatchedStatus !== null) {
 		return {
 			statusType: userMatchedStatus,
-			statusNote: userMatchedNote,
+			statusNote: explicitNote || userMatchedNote,
 			sessionUpdated: null,
 			source: 'TAG',
 		};
@@ -349,7 +448,7 @@ export function resolveStaticState(
 	if (bestStatus !== null) {
 		return {
 			statusType: bestStatus,
-			statusNote: bestNote,
+			statusNote: explicitNote || bestNote,
 			sessionUpdated: null,
 			source: 'TAG',
 		};
@@ -357,7 +456,7 @@ export function resolveStaticState(
 
 	return {
 		statusType: 'UNKNOWN',
-		statusNote: '',
+		statusNote: explicitNote,
 		sessionUpdated: null,
 		source: 'DEFAULT',
 	};

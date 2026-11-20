@@ -97,8 +97,9 @@ export interface ScoringWeights {
 }
 
 export interface StatusMappings {
-	terminatedTags: string[];
+	activeTags: string[];
 	inactiveTags: string[];
+	terminatedTags: string[];
 }
 
 export interface ExperimentFlags {
@@ -131,6 +132,7 @@ export interface PluginSettings {
 	mechanicsPromptPath: string;
 	experiment: ExperimentFlags;
 	onboardingDone: boolean;
+	showNoteBar: boolean;
 }
 
 export interface CandidateScoreBreakdown {
