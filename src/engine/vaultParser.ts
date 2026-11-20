@@ -79,6 +79,17 @@ function normalizeFilePath(rawPath: string): string {
 	return rawPath.trim().replace(/\\/g, '/').replace(/^\/+/, '').toLowerCase();
 }
 
+export function isPathInSessionFolder(
+	filePath: string,
+	sessionFolder: string,
+): boolean {
+	const folderPrefix = normalizeFolderPrefix(sessionFolder);
+	if (!folderPrefix) {
+		return false;
+	}
+	return normalizeFilePath(filePath).startsWith(folderPrefix);
+}
+
 function sanitizeJsonValue(value: unknown): unknown {
 	if (
 		value === null ||

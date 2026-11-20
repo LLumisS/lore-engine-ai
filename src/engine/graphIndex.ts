@@ -9,6 +9,7 @@ import type {
 	GraphNode,
 	GraphStats,
 	PluginSettings,
+	StatusType,
 } from '../types';
 import type { GraphStorage } from './storage';
 import { buildVaultEdges, parseVaultNote } from './vaultParser';
@@ -40,6 +41,10 @@ export class GraphIndex {
 	private readonly app: App;
 	private readonly storage: GraphStorage;
 	private getSettings: () => PluginSettings;
+	private readonly getEntityStateOverrides?: () => Record<
+		string,
+		{ statusType: StatusType; statusNote: string }
+	>;
 
 	private nodesMap = new Map<string, GraphNode>();
 	private edges: GraphEdge[] = [];
@@ -52,10 +57,31 @@ export class GraphIndex {
 		app: App,
 		storage: GraphStorage,
 		getSettings: () => PluginSettings,
+		getEntityStateOverrides?: () => Record<
+			string,
+			{ statusType: StatusType; statusNote: string }
+		>,
 	) {
 		this.app = app;
 		this.storage = storage;
 		this.getSettings = getSettings;
+		this.getEntityStateOverrides = getEntityStateOverrides;
+	}
+
+	private applyStateOverride(node: GraphNode): GraphNode {
+		const override = this.getEntityStateOverrides?.()[node.id];
+		if (!override) {
+			return node;
+		}
+		return {
+			...node,
+			staticState: {
+				statusType: override.statusType,
+				statusNote: override.statusNote,
+				sessionUpdated: null,
+				source: 'EVENT',
+			},
+		};
 	}
 
 	onDirtyChange(listener: (dirtyCount: number) => void): () => void {
@@ -346,7 +372,10 @@ export class GraphIndex {
 							activeIgnoreRules,
 						);
 						if (parsed) {
-							this.nodesMap.set(parsed.id, parsed);
+							this.nodesMap.set(
+								parsed.id,
+								this.applyStateOverride(parsed),
+							);
 						} else {
 							this.nodesMap.delete(path);
 						}
@@ -422,7 +451,10 @@ export class GraphIndex {
 		);
 
 		if (parsed) {
-			this.nodesMap.set(parsed.id, { ...parsed, isDirty: false });
+			this.nodesMap.set(
+				parsed.id,
+				this.applyStateOverride({ ...parsed, isDirty: false }),
+			);
 		} else {
 			this.nodesMap.delete(file.path);
 		}
@@ -445,6 +477,35 @@ export class GraphIndex {
 		this.emitDirtyCount();
 
 		return updated;
+	}
+
+	async applyEntityStateOverrides(
+		updates: Record<string, { statusType: StatusType; statusNote: string }>,
+	): Promise<void> {
+		let changed = false;
+		for (const [nodeId, override] of Object.entries(updates)) {
+			const existing = this.nodesMap.get(nodeId);
+			if (!existing) {
+				continue;
+			}
+			this.nodesMap.set(nodeId, {
+				...existing,
+				staticState: {
+					statusType: override.statusType,
+					statusNote: override.statusNote,
+					sessionUpdated: null,
+					source: 'EVENT',
+				},
+			});
+			changed = true;
+		}
+		if (changed) {
+			await this.storage.saveSnapshot(
+				this.getNodes(),
+				this.edges,
+				this.lastIgnoreRaw,
+			);
+		}
 	}
 
 	getNodes(): GraphNode[] {

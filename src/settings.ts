@@ -88,7 +88,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	mechanicsPromptPath: '',
 	experiment: DEFAULT_EXPERIMENT_FLAGS,
 	onboardingDone: false,
-	showNoteBar: false,
 };
 
 function cloneTypeMappings(mappings: TypeMapping[]): TypeMapping[] {
