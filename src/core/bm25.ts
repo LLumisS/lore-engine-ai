@@ -1,4 +1,4 @@
-import type { EntityType, GraphNode } from '../types';
+import type { EntityType, GraphNode, NoteSection } from '../types';
 import { normalizeText } from './statusRules';
 
 export const DEFAULT_ANCHOR_EXCLUDED_TYPES: readonly EntityType[] = [
@@ -136,6 +136,163 @@ interface IndexedDocument {
 	weightedLength: number;
 }
 
+function scoreBm25Documents(
+	docs: IndexedDocument[],
+	docFreq: Map<string, number>,
+	queryTerms: string[],
+	totalLength: number,
+): Bm25SearchResult[] {
+	const totalDocs = docs.length;
+	if (totalDocs === 0 || queryTerms.length === 0) {
+		return [];
+	}
+
+	const avgDocLength = totalLength / Math.max(1, totalDocs);
+	const scored: Bm25SearchResult[] = [];
+
+	for (const doc of docs) {
+		let score = 0;
+		for (const term of queryTerms) {
+			const tf = doc.termCounts.get(term) ?? 0;
+			if (tf <= 0) {
+				continue;
+			}
+			const df = docFreq.get(term) ?? 0;
+			const idf = Math.log(1 + (totalDocs - df + 0.5) / (df + 0.5));
+			const normFactor =
+				1 - BM25_B + BM25_B * (doc.weightedLength / Math.max(1, avgDocLength));
+			const tfComponent =
+				(tf * (BM25_K1 + 1)) / (tf + BM25_K1 * normFactor);
+			score += idf * tfComponent;
+		}
+
+		if (score > 0) {
+			scored.push({
+				nodeId: doc.nodeId,
+				score: Number(score.toFixed(6)),
+			});
+		}
+	}
+
+	scored.sort((a, b) => {
+		if (b.score !== a.score) {
+			return b.score - a.score;
+		}
+		return a.nodeId.localeCompare(b.nodeId);
+	});
+
+	return scored;
+}
+
+/**
+ * Min-max normalizes positive BM25 scores within a single query into [0, 1].
+ * Positive matches stay > 0 (minimum 0.05 when max > min) so weak lexical matches remain distinguishable from 0.
+ */
+export function normalizeBm25Scores(
+	results: Bm25SearchResult[],
+): Bm25SearchResult[] {
+	if (results.length === 0) {
+		return [];
+	}
+
+	let minScore = Number.POSITIVE_INFINITY;
+	let maxScore = Number.NEGATIVE_INFINITY;
+	for (const entry of results) {
+		if (entry.score < minScore) {
+			minScore = entry.score;
+		}
+		if (entry.score > maxScore) {
+			maxScore = entry.score;
+		}
+	}
+
+	if (maxScore <= 0) {
+		return results.map((entry) => ({ ...entry, score: 0 }));
+	}
+
+	if (maxScore === minScore) {
+		return results.map((entry) => ({ ...entry, score: 1 }));
+	}
+
+	const range = maxScore - minScore;
+	return results.map((entry) => ({
+		...entry,
+		score:
+			entry.score <= 0
+				? 0
+				: Number(
+						(0.05 + 0.95 * ((entry.score - minScore) / range)).toFixed(6),
+					),
+	}));
+}
+
+/**
+ * Ranks markdown sections of a long note by BM25 relevance to `query`
+ * (weighting section heading at 2.5x and body content at 1x).
+ */
+export function rankSectionsByBm25(
+	sections: NoteSection[],
+	query: string,
+): Array<{ section: NoteSection; index: number; score: number }> {
+	if (sections.length === 0) {
+		return [];
+	}
+
+	const queryTerms = Array.from(new Set(tokenizeForBm25(query)));
+	if (queryTerms.length === 0) {
+		return sections.map((section, index) => ({
+			section,
+			index,
+			score: 0,
+		}));
+	}
+
+	const docs: IndexedDocument[] = [];
+	const docFreq = new Map<string, number>();
+	let totalLength = 0;
+
+	sections.forEach((section, index) => {
+		const termCounts = new Map<string, number>();
+		let weightedLength = 0;
+		weightedLength += addWeightedTerms(termCounts, section.heading, ALIAS_WEIGHT);
+		weightedLength += addWeightedTerms(termCounts, section.content, CONTENT_WEIGHT);
+		totalLength += weightedLength;
+
+		docs.push({
+			nodeId: String(index),
+			termCounts,
+			weightedLength,
+		});
+
+		for (const term of queryTerms) {
+			if ((termCounts.get(term) ?? 0) > 0) {
+				docFreq.set(term, (docFreq.get(term) ?? 0) + 1);
+			}
+		}
+	});
+
+	const normalized = normalizeBm25Scores(
+		scoreBm25Documents(docs, docFreq, queryTerms, totalLength),
+	);
+	const scoreByIndex = new Map<number, number>();
+	for (const entry of normalized) {
+		scoreByIndex.set(Number.parseInt(entry.nodeId, 10), entry.score);
+	}
+
+	return sections
+		.map((section, index) => ({
+			section,
+			index,
+			score: scoreByIndex.get(index) ?? 0,
+		}))
+		.sort((a, b) => {
+			if (b.score !== a.score) {
+				return b.score - a.score;
+			}
+			return a.index - b.index;
+		});
+}
+
 /**
  * Runs deterministic field-weighted Okapi BM25 search over GraphNode[]
  * (`title`, `aliases`, `tags`, `content`).
@@ -194,42 +351,10 @@ export function searchBm25(
 		}
 	}
 
-	const avgDocLength = totalLength / Math.max(1, docs.length);
-	const totalDocs = docs.length;
-	const scored: Bm25SearchResult[] = [];
-
-	for (const doc of docs) {
-		let score = 0;
-		for (const term of queryTerms) {
-			const tf = doc.termCounts.get(term) ?? 0;
-			if (tf <= 0) {
-				continue;
-			}
-			const df = docFreq.get(term) ?? 0;
-			const idf = Math.log(1 + (totalDocs - df + 0.5) / (df + 0.5));
-			const normFactor =
-				1 - BM25_B + BM25_B * (doc.weightedLength / Math.max(1, avgDocLength));
-			const tfComponent =
-				(tf * (BM25_K1 + 1)) / (tf + BM25_K1 * normFactor);
-			score += idf * tfComponent;
-		}
-
-		if (score > 0) {
-			scored.push({
-				nodeId: doc.nodeId,
-				score: Number(score.toFixed(6)),
-			});
-		}
-	}
-
-	scored.sort((a, b) => {
-		if (b.score !== a.score) {
-			return b.score - a.score;
-		}
-		return a.nodeId.localeCompare(b.nodeId);
-	});
-
-	return scored.slice(0, topK);
+	return scoreBm25Documents(docs, docFreq, queryTerms, totalLength).slice(
+		0,
+		topK,
+	);
 }
 
 /**
@@ -306,12 +431,18 @@ export function fuseHybridRankings(
 			return a.nodeId.localeCompare(b.nodeId);
 		});
 
+	const normalizedLexical = normalizeBm25Scores(sortedLexical);
 	const maxVector = sortedVector[0]?.score ?? 0;
-	const lexMap = new Map<string, { raw: number; rank: number }>();
+	const lexMap = new Map<string, { raw: number; norm: number; rank: number }>();
 	const vecMap = new Map<string, { raw: number; rank: number }>();
 
-	sortedLexical.forEach((entry, idx) => {
-		lexMap.set(entry.nodeId, { raw: entry.score, rank: idx + 1 });
+	normalizedLexical.forEach((entry, idx) => {
+		const rawEntry = sortedLexical[idx];
+		lexMap.set(entry.nodeId, {
+			raw: rawEntry?.score ?? entry.score,
+			norm: entry.score,
+			rank: idx + 1,
+		});
 	});
 	sortedVector.forEach((entry, idx) => {
 		vecMap.set(entry.nodeId, { raw: entry.score, rank: idx + 1 });
@@ -330,7 +461,7 @@ export function fuseHybridRankings(
 		const lex = lexMap.get(nodeId);
 		const vec = vecMap.get(nodeId);
 
-		const normLex = lex && maxLexical > 0 ? lex.raw / maxLexical : 0;
+		const normLex = lex ? lex.norm : 0;
 		const normVec = vec && maxVector > 0 ? vec.raw / maxVector : 0;
 		const rrfRaw =
 			(lex ? 1 / (RRF_K + lex.rank) : 0) +

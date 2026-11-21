@@ -118,7 +118,11 @@ function scorePair(
 
 			const cp = commonPrefixLength(qw, tw);
 			const threshold =
-				maxLen <= 5 ? 3 : Math.max(4, Math.ceil(0.7 * maxLen));
+				maxLen <= 5
+					? 3
+					: minLen >= 4
+						? Math.min(minLen, Math.max(4, Math.ceil(0.7 * maxLen)))
+						: Math.ceil(0.7 * maxLen);
 			if (cp < threshold) {
 				allPrefixMatched = false;
 				break;
@@ -297,4 +301,272 @@ export function resolveSubjects(
 		matchesBySubject,
 		unresolvedSubjects,
 	};
+}
+
+const MENTION_MIN_CONFIDENCE = 0.85;
+
+// Common uk/ru/en query words & stems that should never trigger single-word entity mentions
+const COMMON_STOPWORD_EXACT = new Set<string>([
+	'що',
+	'что',
+	'кто',
+	'хто',
+	'где',
+	'де',
+	'как',
+	'як',
+	'бо',
+	'бой',
+	'бій',
+	'між',
+	'меж',
+	'для',
+	'про',
+	'при',
+	'без',
+	'над',
+	'під',
+	'под',
+	'who',
+	'what',
+	'where',
+	'when',
+	'why',
+	'how',
+	'the',
+	'and',
+	'with',
+	'from',
+	'into',
+	'about',
+	'between',
+	'after',
+	'before',
+	'city',
+	'town',
+	'loot',
+]);
+
+const COMMON_STOPWORD_STEMS: readonly string[] = [
+	'вернул',
+	'поверну',
+	'пошл',
+	'пішл',
+	'пришл',
+	'прийш',
+	'ушл',
+	'вишл',
+	'вышл',
+	'задан',
+	'завдан',
+	'квест',
+	'игрок',
+	'гравц',
+	'город',
+	'міст',
+	'таверн',
+	'дорог',
+	'шлях',
+	'битв',
+	'встреч',
+	'зустріч',
+	'сесс',
+	'сесі',
+	'парт',
+	'геро',
+	'персонаж',
+	'монстр',
+	'враг',
+	'ворог',
+	'предмет',
+	'артефакт',
+	'локац',
+	'фракц',
+	'истор',
+	'істор',
+	'правил',
+	'мастер',
+	'майст',
+	'вопрос',
+	'питан',
+	'когд',
+	'коли',
+	'если',
+	'якщо',
+	'посл',
+	'післ',
+	'перед',
+	'между',
+	'сюжет',
+	'лини',
+	'ліні',
+	'наслід',
+	'послед',
+	'баланс',
+	'стат',
+	'возврат',
+	'поверн',
+	'return',
+	'quest',
+	'player',
+	'party',
+	'character',
+	'location',
+	'faction',
+	'monster',
+	'session',
+	'battle',
+	'fight',
+	'meeting',
+	'tavern',
+];
+
+const CAPITALIZED_START_REGEX = /^[A-ZА-ЯІЇЄҐЁ]/;
+const WIKILINK_REGEX = /\[\[([^\]\r\n]+)\]\]/g;
+
+function isCommonQueryStopword(normalizedWord: string): boolean {
+	if (COMMON_STOPWORD_EXACT.has(normalizedWord)) {
+		return true;
+	}
+	return COMMON_STOPWORD_STEMS.some(
+		(stem) =>
+			normalizedWord.startsWith(stem) &&
+			normalizedWord.length - stem.length <= 3,
+	);
+}
+
+function tokenizeRawWordsWithCase(
+	text: string,
+): Array<{ normalized: string; isCapitalized: boolean }> {
+	const cleaned = text.replace(/[’ʼ`´]/g, "'");
+	const rawParts = cleaned
+		.split(/[^A-Za-zА-Яа-яІіЇїЄєҐґЁё0-9']+/)
+		.filter((part) => part.length > 0);
+
+	const result: Array<{ normalized: string; isCapitalized: boolean }> = [];
+	for (const part of rawParts) {
+		const normalized = normalizeText(part);
+		if (!normalized) {
+			continue;
+		}
+		result.push({
+			normalized,
+			isCapitalized: CAPITALIZED_START_REGEX.test(part),
+		});
+	}
+	return result;
+}
+
+function isStrictMentionMatch(match: EntityMatchResult): boolean {
+	const top = match.candidates[0];
+	return (
+		match.id !== null &&
+		!match.ambiguous &&
+		match.confidence >= MENTION_MIN_CONFIDENCE &&
+		top !== undefined &&
+		top.matchKind !== 'fuzzy'
+	);
+}
+
+/**
+ * Scans a free-form user query for unambiguous, strict mentions of campaign entity
+ * notes (excluding SESSION_LOG and META), reusing `matchEntityName`.
+ * Prefers precision over recall: requires explicit `[[wikilinks]]`, exact/prefix
+ * multi-word matches, or capitalized non-stopword single-word proper names.
+ */
+export function detectEntityMentionsInText(
+	text: string,
+	nodes: GraphNode[],
+): string[] {
+	const eligibleNodes = nodes.filter(
+		(node) => node.type !== 'SESSION_LOG' && node.type !== 'META',
+	);
+	if (!text.trim() || eligibleNodes.length === 0) {
+		return [];
+	}
+
+	const detectedIds: string[] = [];
+	const seenIds = new Set<string>();
+	const eligibleById = new Map(eligibleNodes.map((n) => [n.id, n]));
+
+	const recordMatch = (id: string): void => {
+		if (!seenIds.has(id)) {
+			seenIds.add(id);
+			detectedIds.push(id);
+		}
+	};
+
+	// 1. Resolve explicit [[wikilink]] / [[path|alias]] mentions first
+	const textWithoutBrackets = text.replace(
+		WIKILINK_REGEX,
+		(_full, inner: string) => {
+			const [rawTarget = '', rawAlias = ''] = inner.split('|');
+			const cleanTarget = rawTarget.trim();
+			const targetTitle = cleanTarget
+				.split('/')
+				.pop()
+				?.replace(/\.md$/i, '')
+				.trim();
+
+			if (cleanTarget) {
+				if (eligibleById.has(cleanTarget)) {
+					recordMatch(cleanTarget);
+				} else if (eligibleById.has(`${cleanTarget}.md`)) {
+					recordMatch(`${cleanTarget}.md`);
+				}
+			}
+
+			for (const probe of [targetTitle ?? '', rawAlias.trim()]) {
+				if (!probe) {
+					continue;
+				}
+				const match = matchEntityName(probe, eligibleNodes);
+				if (isStrictMentionMatch(match)) {
+					recordMatch(match.id!);
+				}
+			}
+
+			return rawAlias.trim() || targetTitle || cleanTarget;
+		},
+	);
+
+	// 2. Strict n-gram scan over remaining query words preserving original capitalization
+	const tokens = tokenizeRawWordsWithCase(textWithoutBrackets);
+	if (tokens.length === 0) {
+		return detectedIds;
+	}
+
+	const maxNgram = 4;
+	for (let i = 0; i < tokens.length; i++) {
+		let matchedLen = 0;
+		const upperLen = Math.min(maxNgram, tokens.length - i);
+
+		for (let len = upperLen; len >= 1; len--) {
+			const slice = tokens.slice(i, i + len);
+			if (len === 1) {
+				const single = slice[0]!;
+				if (
+					!single.isCapitalized ||
+					single.normalized.length < 3 ||
+					isCommonQueryStopword(single.normalized)
+				) {
+					continue;
+				}
+			}
+
+			const phrase = slice.map((tok) => tok.normalized).join(' ');
+			const match = matchEntityName(phrase, eligibleNodes);
+			if (isStrictMentionMatch(match)) {
+				recordMatch(match.id!);
+				matchedLen = len;
+				break;
+			}
+		}
+
+		if (matchedLen > 1) {
+			i += matchedLen - 1;
+		}
+	}
+
+	return detectedIds;
 }
