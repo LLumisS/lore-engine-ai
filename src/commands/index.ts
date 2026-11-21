@@ -90,4 +90,12 @@ export function registerCommands(
 			return false;
 		},
 	});
+
+	plugin.addCommand({
+		id: 'assemble-context',
+		name: t(lang, 'commandAssembleContextName'),
+		callback: () => {
+			loreApp.openContextInspectorModal();
+		},
+	});
 }

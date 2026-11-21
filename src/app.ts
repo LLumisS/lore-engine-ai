@@ -1,4 +1,5 @@
 import { Notice, TFile, type Plugin } from 'obsidian';
+import { assembleContext } from './core/contextAssembler';
 import { matchEntityName } from './core/entityMatcher';
 import {
 	GraphStatsModal,
@@ -17,11 +18,22 @@ import {
 } from './engine/eventManager';
 import { GraphIndex } from './engine/graphIndex';
 import { GraphStorage } from './engine/storage';
+import {
+	appendRetrievalTraceLog,
+	loadMechanicsRulesText,
+} from './engine/traceLogger';
 import { isPathInSessionFolder } from './engine/vaultParser';
 import { VectorIndex } from './engine/vectorIndex';
 import { formatMessage, t } from './i18n';
 import { createEmbeddingProvider, createLlmProvider } from './llm/llmProvider';
-import type { PluginSettings, SessionEvent, StatusType } from './types';
+import type {
+	AssembledContext,
+	PluginSettings,
+	RetrievalMode,
+	SessionEvent,
+	StatusType,
+} from './types';
+import { ContextInspectorModal } from './ui/contextInspector';
 import {
 	AnchorSearchModal,
 	NoteMetadataModal,
@@ -39,6 +51,7 @@ export interface PluginBridge extends Plugin, LoreEnginePluginHost {
  */
 export class LoreEngineApp {
 	private readonly plugin: PluginBridge;
+	private readonly pluginDir: string;
 	private readonly storage: GraphStorage;
 	private readonly graphIndex: GraphIndex;
 	private readonly vectorIndex: VectorIndex;
@@ -48,16 +61,17 @@ export class LoreEngineApp {
 	private unsubscribeDirty: (() => void) | null = null;
 	private activeAbortControllers = new Set<AbortController>();
 	private pendingSelfMetadataUpdates = new Set<string>();
+	private lastAssembledContext: AssembledContext | null = null;
 
 	constructor(plugin: PluginBridge) {
 		this.plugin = plugin;
 		const app = plugin.app;
-		const pluginDir =
+		this.pluginDir =
 			plugin.manifest.dir ??
 			`${app.vault.configDir}/plugins/${plugin.manifest.id}`;
 
 		this.storage = new GraphStorage(app.vault.getName());
-		this.eventManager = new EventManager(app, pluginDir);
+		this.eventManager = new EventManager(app, this.pluginDir);
 		this.graphIndex = new GraphIndex(
 			app,
 			this.storage,
@@ -275,6 +289,64 @@ export class LoreEngineApp {
 					provider: createEmbeddingProvider(this.plugin.settings),
 					signal,
 				}),
+		}).open();
+	}
+
+	async assembleContextForQuery(params: {
+		query: string;
+		mode: RetrievalMode;
+		activePoolIds?: string[];
+		customNodeIds?: string[];
+		signal?: AbortSignal;
+	}): Promise<AssembledContext> {
+		const nodes = this.graphIndex.getNodes();
+		const edges = this.graphIndex.getEdges();
+		const events = this.eventManager.getEvents();
+
+		const anchorOutput = await this.vectorIndex.searchAnchors({
+			query: params.query,
+			nodes,
+			topK: 25,
+			provider: createEmbeddingProvider(this.plugin.settings),
+			signal: params.signal,
+		});
+
+		const mechanicsRulesText = await loadMechanicsRulesText(
+			this.plugin.app,
+			this.plugin.settings,
+		);
+
+		const result = assembleContext({
+			query: params.query,
+			requestedMode: params.mode,
+			nodes,
+			edges,
+			events,
+			settings: this.plugin.settings,
+			anchorMatches: anchorOutput.results,
+			activePoolIds: params.activePoolIds,
+			customNodeIds: params.customNodeIds,
+			mechanicsRulesText,
+		});
+
+		this.lastAssembledContext = result;
+		await appendRetrievalTraceLog(this.plugin.app, this.pluginDir, {
+			query: params.query,
+			settings: this.plugin.settings,
+			result,
+		});
+
+		return result;
+	}
+
+	openContextInspectorModal(): void {
+		new ContextInspectorModal({
+			app: this.plugin.app,
+			lang: this.plugin.settings.uiLanguage,
+			nodes: this.graphIndex.getNodes(),
+			initialResult: this.lastAssembledContext,
+			onAssemble: (query, mode, signal) =>
+				this.assembleContextForQuery({ query, mode, signal }),
 		}).open();
 	}
 
