@@ -18,6 +18,7 @@ const ENTITY_TYPES: readonly EntityType[] = [
 	'FACTION',
 	'QUEST',
 	'ITEM',
+	'MONSTER',
 	'SESSION_LOG',
 	'LORE',
 	'META',

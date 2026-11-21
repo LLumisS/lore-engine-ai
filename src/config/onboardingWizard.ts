@@ -25,6 +25,7 @@ const VALID_ENTITY_TYPES: readonly EntityType[] = [
 	'FACTION',
 	'QUEST',
 	'ITEM',
+	'MONSTER',
 	'SESSION_LOG',
 	'LORE',
 	'META',
@@ -37,6 +38,7 @@ const ASSIGNABLE_RULE_TYPES: readonly EntityType[] = [
 	'FACTION',
 	'QUEST',
 	'ITEM',
+	'MONSTER',
 	'SESSION_LOG',
 	'LORE',
 	'META',
@@ -308,6 +310,20 @@ function matchFolderToEntityType(folderNameLower: string): EntityType | null {
 		folderNameLower.includes('artifact')
 	) {
 		return 'ITEM';
+	}
+	if (
+		folderNameLower.includes('monster') ||
+		folderNameLower.includes('монстр') ||
+		folderNameLower.includes('bestiar') ||
+		folderNameLower.includes('бестіар') ||
+		folderNameLower.includes('бестиар') ||
+		folderNameLower.includes('statblock') ||
+		folderNameLower.includes('статблок') ||
+		folderNameLower.includes('creature') ||
+		folderNameLower.includes('істот') ||
+		folderNameLower.includes('существ')
+	) {
+		return 'MONSTER';
 	}
 	if (
 		folderNameLower.includes('lore') ||

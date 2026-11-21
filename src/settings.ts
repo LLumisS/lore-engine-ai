@@ -21,6 +21,7 @@ export const DEFAULT_EMBEDDING_MODELS: Partial<Record<LlmProviderId, string>> =
 	gemini: '',
 };
 
+// Starting (initial) heuristic weights for multi-factor graph ranking (to be calibrated in thesis evaluation)
 export const DEFAULT_SCORING_WEIGHTS: ScoringWeights = {
 	semantic: 0.35,
 	proximity: 0.25,
@@ -41,6 +42,8 @@ export const DEFAULT_TYPE_MAPPINGS: TypeMapping[] = [
 	{ kind: 'folder', pattern: 'Quests/', type: 'QUEST' },
 	{ kind: 'folder', pattern: 'Factions/', type: 'FACTION' },
 	{ kind: 'folder', pattern: 'Items/', type: 'ITEM' },
+	{ kind: 'folder', pattern: 'Monsters/', type: 'MONSTER' },
+	{ kind: 'folder', pattern: 'Bestiary/', type: 'MONSTER' },
 	{ kind: 'folder', pattern: 'Lore/', type: 'LORE' },
 	{ kind: 'tag', pattern: '#npc', type: 'NPC' },
 	{ kind: 'tag', pattern: '#location', type: 'LOCATION' },
@@ -53,6 +56,9 @@ export const DEFAULT_TYPE_MAPPINGS: TypeMapping[] = [
 	{ kind: 'tag', pattern: '#фракция', type: 'FACTION' },
 	{ kind: 'tag', pattern: '#item', type: 'ITEM' },
 	{ kind: 'tag', pattern: '#предмет', type: 'ITEM' },
+	{ kind: 'tag', pattern: '#monster', type: 'MONSTER' },
+	{ kind: 'tag', pattern: '#монстр', type: 'MONSTER' },
+	{ kind: 'tag', pattern: '#statblock', type: 'MONSTER' },
 	{ kind: 'tag', pattern: '#lore', type: 'LORE' },
 	{ kind: 'tag', pattern: '#лор', type: 'LORE' },
 	{ kind: 'tag', pattern: '#meta', type: 'META' },
@@ -82,6 +88,8 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	statusMappings: DEFAULT_STATUS_MAPPINGS,
 	tokenBudgetDeep: 10000,
 	tokenBudgetLight: 3500,
+	eventsBudgetShare: 0.4,
+	firstHopMaxCandidates: 8,
 	historyTurns: 5,
 	entityPoolSize: 3,
 	scoringWeights: DEFAULT_SCORING_WEIGHTS,

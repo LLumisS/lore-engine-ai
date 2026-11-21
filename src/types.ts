@@ -9,6 +9,7 @@ export type EntityType =
 	| 'FACTION'
 	| 'QUEST'
 	| 'ITEM'
+	| 'MONSTER'
 	| 'SESSION_LOG'
 	| 'LORE'
 	| 'META'
@@ -126,6 +127,8 @@ export interface PluginSettings {
 	statusMappings: StatusMappings;
 	tokenBudgetDeep: number;
 	tokenBudgetLight: number;
+	eventsBudgetShare: number;
+	firstHopMaxCandidates: number;
 	historyTurns: number;
 	entityPoolSize: number;
 	scoringWeights: ScoringWeights;
